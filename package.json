@@ -1,0 +1,24 @@
+{
+  "name": "numberlinesupervisor",
+  "version": "1.0.0",
+  "description": "Number Line supervisor",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LoudSoftware/DiscordCountingSupervisorBot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LoudSoftware/DiscordCountingSupervisorBot/issues"
+  },
+  "homepage": "https://github.com/LoudSoftware/DiscordCountingSupervisorBot#readme",
+  "dependencies": {
+    "discord.io": "^2.5.3",
+    "dotenv": "^5.0.1",
+    "winston": "^2.4.1"
+  }
+}
