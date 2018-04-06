@@ -1,4 +1,4 @@
-var eris = require('eris');
+var Eris = require('eris');
 var logger = require('winston');
 
 // Loading the token from the .env file
@@ -13,3 +13,14 @@ logger.add(logger.transports.Console, {
 });
 logger.level = 'debug';
 // Initialize Discord Bot
+
+var bot = new Eris(process.env.BOT_TOKEN);
+bot.on("ready", () => {
+    console.log("Ready!");
+});
+bot.on("messageCreate", (msg) => {
+    if(msg.content === "#ping") {
+        bot.createMessage(msg.channel.id, "Pong!");
+    }
+});
+bot.connect();
