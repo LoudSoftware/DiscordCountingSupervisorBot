@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/LoudSoftware/DiscordCountingSupervisorBot#readme",
   "dependencies": {
-    "discord.io": "^2.5.3",
     "dotenv": "^5.0.1",
+    "eris": "^0.8.5",
     "winston": "^2.4.1"
   }
 }
