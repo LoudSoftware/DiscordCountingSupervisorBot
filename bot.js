@@ -54,8 +54,18 @@ function checkIfPrevious(msg) {
         console.log(previous.content);
         if ((parseInt(msg.content)) != (parseInt(previous.content) + 1)) {
             shame(msg);
+        } else {
+            checkMilestone(msg);
         }
     });
+}
+
+
+function checkMilestone(msg){
+    number = msg.content;
+    if (number % 500 == 0) { // If number is divisible by 500 run the milestone notification
+        bot.createMessage(generalID, `Wow! this is amazing, with all our efforts, we reached ${number} Keep it up kappa 😚😚😚`);
+    }
 }
 
 
