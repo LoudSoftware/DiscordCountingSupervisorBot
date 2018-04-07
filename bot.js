@@ -23,14 +23,8 @@ console.log('Attempting to connect to server...');
 
 var bot = new Eris.CommandClient(process.env.BOT_TOKEN, {}, {
     description: "Description",
-    owner: "@LoudSoftware",
+    owner: "Loud",
     prefix: "#",
-});
-
-bot.registerCommand("ping", "Pong!", {
-    description: "pong",
-    fullDescription: "does pong",
-
 });
 
 bot.on("ready", () => {
