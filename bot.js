@@ -19,12 +19,11 @@ var dotenv = require('dotenv').config();
 var token = process.env.BOT_TOKEN;
 
 
-var botID = (process.env.CLIENT_ID ? process.env.CLIENT_ID : "431866126851506177");
-var generalID = (process.env.GENERAL_CHANNEL_ID ? process.env.GENERAL_CHANNEL_ID : "226800861572104195");
-var numberChannelID = (process.env.NUMBER_CHANNEL_ID ? process.env.NUMBER_CHANNEL_ID : "431863306509352961");
+var botID = process.env.CLIENT_ID;
+var generalID = process.env.GENERAL_CHANNEL_ID;
+var numberChannelID = process.env.NUMBER_CHANNEL_ID;
 
 
-const channelID = "243191930840809473";
 
 var numberChannel = "";
 var generalChannel = "";
