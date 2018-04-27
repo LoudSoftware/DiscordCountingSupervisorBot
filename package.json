@@ -19,7 +19,6 @@
   "dependencies": {
     "discord.js": "^11.3.2",
     "dotenv": "^5.0.1",
-    "eris": "^0.8.5",
     "winston": "^2.4.2"
   }
 }
