@@ -34,7 +34,6 @@ module.exports = {
 	},
 
 	getCurrentNumber(message) {
-		console.log(message);
 		return message.client.channels.get(process.env.NUMBER_CHANNEL_ID).fetchMessages({ limit: 1 });
 
 	}
