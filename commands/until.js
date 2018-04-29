@@ -12,7 +12,7 @@ module.exports = {
             return message.reply('This must be a numbah!');
         }
 
-        
+
         await this.getCurrentNumber(message, args);
 
     },
