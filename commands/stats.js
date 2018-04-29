@@ -47,8 +47,8 @@ module.exports = {
             .addBlankField()
             .addField('Top 3 counters of the Month:',
                 `1.  ${this.topAuthors[0]} (All hail the king!)
-2. ${(this.topAuthors[1] === undefined? "You let him count alone??" : this.topAuthors[1])}
-3. ${(this.topAuthors[2] === undefined? "Hmm, nobody here" : this.topAuthors[2])}
+2. ${(this.topAuthors[1] === undefined ? 'You let him count alone??' : this.topAuthors[1])}
+3. ${(this.topAuthors[2] === undefined ? 'Hmm, nobody here' : this.topAuthors[2])}
 
 (right now I am stoopid bot that only looks at the last 100 messages My master is fixing things but he could be quite lazy sometimes...)`)
             .addBlankField()
