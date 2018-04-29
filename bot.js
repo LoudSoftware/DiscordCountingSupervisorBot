@@ -1,15 +1,18 @@
 const fs = require('fs');
 
-const logger = require('winston');
+// const winston = require('winston');
+const logger = require('./log.js');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const prefix = ':';
+
 
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands');
 
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
+    logger.debug(`Loaded command ${command.name} from ${file}`);
     client.commands.set(command.name, command);
 }
 
@@ -26,26 +29,19 @@ const numberChannelID = process.env.NUMBER_CHANNEL_ID;
 let numberChannel = '';
 let generalChannel = '';
 
-// Configure logger settings
-logger.remove(logger.transports.Console);
-logger.add(logger.transports.Console, {
-    colorize: true,
-});
-logger.level = 'debug';
 
-
-console.log('Attempting to connect to server...');
+logger.info('Attempting to connect to server...');
 
 
 client.on('ready',
     () => {
-        console.log('ready');
+        logger.info('Connected, bot ready...');
         numberChannel = client.channels.get(numberChannelID.toString());
         generalChannel = client.channels.get(generalID.toString());
     });
 
 client.on('message', message => {
-    // console.log(message);
+    logger.verbose('Received message:', message.content);
     if (message.content.startsWith(prefix) && !message.author.bot && message.channel === generalChannel) {
 
         const args = message.content.slice(prefix.length).split(/ +/);
@@ -56,7 +52,7 @@ client.on('message', message => {
         try {
             client.commands.get(command).execute(message, args);
         } catch (error) {
-            console.log(error);
+            logger.debug(error);
             message.reply('there was an error trying to execute that command!');
         }
     } else if (message.channel === numberChannel && !message.author.bot) {
@@ -82,7 +78,7 @@ function checkIfPrevious(msg) {
 
             if (previous.length != 0) {
                 const prevMsg = previous[0];
-                console.log(prevMsg.content);
+                logger.debug(`Previous was: ${prevMsg.content}, Current is: ${msg.content}`);
                 if ((parseInt(msg.content)) !== (parseInt(prevMsg.content) + 1)) {
                     shame(msg);
                 } else {

@@ -40,7 +40,7 @@
         }],
         "space-in-parens": "error",
         "space-infix-ops": "error",
-        "space-unary-ops": "error",
+        "space-unary-ops": "off",
         "spaced-comment": "error",
         "yoda": "error"
     }
