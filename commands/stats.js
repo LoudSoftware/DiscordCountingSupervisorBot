@@ -45,7 +45,7 @@ module.exports = {
             .addField(`We are currently at: ${this.currentNumber}`,
                 `This means that we've reached ${Math.floor(this.currentNumber / 500)} milestones.`)
             .addBlankField()
-            .addField('Top 2 counters of the month:', `1. ${this.loudSoftware} (All hail the king!) \n2. ${this.topAuthor}`)
+            .addField('Top 2 counters of the month:', `1. ${this.loudSoftware} (All hail the king!) \n2. ${this.topAuthor}\n(right now it only analyzes the last 100 messages)`)
             .addBlankField()
             // .addField('Inline field title', 'Some value here', true)
             // .addField('Inline field title', 'Some value here', true)
