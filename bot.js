@@ -103,7 +103,7 @@ function checkMilestone(msg) {
 
 function shame(msg) {
     msg.delete();
-    generalChannel.send(`!insult ${msg.author}`);
+    generalChannel.send(`>insult ${msg.author}`);
     // generalChannel.send(`Shame... ${msg.author} does not believe in true order!`);
 }
 
