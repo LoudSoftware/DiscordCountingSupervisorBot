@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-
+const logger = require('../log.js');
 
 module.exports = {
     logoUrl: 'http://gravatar.com/avatar/0a68062bcb04fd6001941b9126dfa9d9.jpg',
@@ -32,7 +32,7 @@ module.exports = {
             })
             .then(map => map.array())
             .then(numbersArray => this.currentNumber = parseInt(numbersArray[0].content))
-            .catch(error => console.log(error));
+            .catch(error => logger.error(error));
     },
 
     sendStats(message) {
@@ -66,11 +66,12 @@ module.exports = {
             })
             .then(res => res.array());
 
-        monthAuthors.forEach((item, index, object) => {
 
-            const currentDate = new Date();
-            const currentMonth = currentDate.getMonth();
-            const currentYear = currentDate.getYear();
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getYear();
+
+        monthAuthors.forEach((item, index, object) => {
 
             if (item.createdAt.getMonth() !== currentMonth ||
                 item.createdAt.getYear() !== currentYear) {
@@ -79,6 +80,7 @@ module.exports = {
         });
 
         this.topAuthor = this.processMonthlyMessages(monthAuthors);
+        logger.debug('Top author of the month (based on the last 100 messages):', this.topAuthor.username);
 
     },
 
