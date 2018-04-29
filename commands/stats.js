@@ -62,7 +62,7 @@ module.exports = {
     async getMostActive(message) {
         const monthAuthors = await message.client.channels.get(process.env.NUMBER_CHANNEL_ID)
             .fetchMessages({
-                limit: this.currentNumber,
+                limit: 100,
             })
             .then(res => res.array());
 
