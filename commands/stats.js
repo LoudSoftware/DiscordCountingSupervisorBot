@@ -5,7 +5,7 @@ module.exports = {
     logoUrl: 'http://gravatar.com/avatar/0a68062bcb04fd6001941b9126dfa9d9.jpg',
     currentNumber: 0,
     topContributors: null,
-    topAuthor: null,
+    topAuthors: [],
     loudSoftware: null,
 
     name: 'stats',
@@ -45,7 +45,12 @@ module.exports = {
             .addField(`We are currently at: ${this.currentNumber}`,
                 `This means that we've reached ${Math.floor(this.currentNumber / 500)} milestones.`)
             .addBlankField()
-            .addField('Top 2 counters of the month:', `1. ${this.loudSoftware} (All hail the king!) \n2. ${this.topAuthor}\n(right now it only analyzes the last 100 messages)`)
+            .addField('Top 3 counters of the Month:',
+                `1.  ${this.topAuthors[0]} (All hail the king!)
+2. ${(this.topAuthors[1] === undefined? "You let him count alone??" : this.topAuthors[1])}
+3. ${(this.topAuthors[2] === undefined? "Hmm, nobody here" : this.topAuthors[2])}
+
+(right now I am stoopid bot that only looks at the last 100 messages My master is fixing things but he could be quite lazy sometimes...)`)
             .addBlankField()
             // .addField('Inline field title', 'Some value here', true)
             // .addField('Inline field title', 'Some value here', true)
@@ -79,8 +84,12 @@ module.exports = {
             }
         });
 
-        this.topAuthor = this.processMonthlyMessages(monthAuthors);
-        logger.debug('Top author of the month (based on the last 100 messages):', this.topAuthor.username);
+        const topAuthorIDs = this.processMonthlyMessages(monthAuthors);
+        topAuthorIDs.forEach(elem => {
+            this.topAuthors.push(message.client.users.get(elem));
+        });
+
+        logger.debug('Top author of the month (based on the last 100 messages):', this.topAuthors[0].username);
 
     },
 
@@ -89,21 +98,33 @@ module.exports = {
         if (array.length === 0) {
             return null;
         }
-        const map = {};
-        let maxEl = array[0].author;
+        let map = new Map();
+        let maxEl = array[0];
         let maxCount = 1;
         for (let i = 0; i < array.length; i++) {
-            const el = array[i];
-            if (map[el] === null) {
-                map[el] = 1;
+            const el = array[i].author.id;
+            if (map.get(el) === undefined) {
+                map.set(el, 1);
             } else {
-                map[el]++;
+                let value = map.get(el) + 1;
+                map.set(el, value);
             }
-            if (map[el] > maxCount) {
+            if (map.get(el) > maxCount) {
                 maxEl = el;
-                maxCount = map[el];
+                maxCount = map.get(el);
             }
         }
-        return maxEl;
+
+        map[Symbol.iterator] = function* () {
+            yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
+        }
+
+        let result = [];
+
+        for (let i = 0; i < map.size && i < 3; i++) {
+            result[i] = [...map][i][0];
+        }
+
+        return result;
     },
 };
