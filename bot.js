@@ -1,9 +1,9 @@
 const fs = require('fs');
 
-var logger = require('winston');
+const logger = require('winston');
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const prefix = ":";
+const prefix = ':';
 
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands');
@@ -14,24 +14,22 @@ for (const file of commandFiles) {
 }
 
 // Loading the token from the .env file
-var dotenv = require('dotenv').config();
+require('dotenv').config();
 
-var token = process.env.BOT_TOKEN;
-
-
-var botID = process.env.CLIENT_ID;
-var generalID = process.env.GENERAL_CHANNEL_ID;
-var numberChannelID = process.env.NUMBER_CHANNEL_ID;
+const token = process.env.BOT_TOKEN;
 
 
+const generalID = process.env.GENERAL_CHANNEL_ID;
+const numberChannelID = process.env.NUMBER_CHANNEL_ID;
 
-var numberChannel = "";
-var generalChannel = "";
+
+let numberChannel = '';
+let generalChannel = '';
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
 logger.add(logger.transports.Console, {
-    colorize: true
+    colorize: true,
 });
 logger.level = 'debug';
 
@@ -65,7 +63,7 @@ client.on('message', message => {
         if (isNaN(message.content)) {
             message.delete()
                 .then(msg => {
-                    generalChannel.send(`Shame... ${message.author} wrote something that was not a number!`);
+                    generalChannel.send(`Shame... ${msg.author} wrote something that was not a number!`);
                 });
         } else {
             checkIfPrevious(message);
@@ -74,14 +72,13 @@ client.on('message', message => {
 });
 
 
-client.login(process.env.BOT_TOKEN.toString());
-
+client.login(token);
 
 
 function checkIfPrevious(msg) {
     getPreviousMessage(msg)
         .then((result) => {
-            let previous = result.array();
+            const previous = result.array();
 
             if (previous.length != 0) {
                 const prevMsg = previous[0];
@@ -91,19 +88,18 @@ function checkIfPrevious(msg) {
                 } else {
                     checkMilestone(msg);
                 }
-            } else {
-                // check if input is 0
-                if ((parseInt(msg.content)) !== 0){
-                    shame(msg);
-                }
+            } else if ((parseInt(msg.content)) !== 0) {
+                shame(msg);
             }
+
         });
 }
 
 
 function checkMilestone(msg) {
     const number = msg.content;
-    if (number % 500 === 0) { // If number is divisible by 500 run the milestone notification
+    if (number % 500 === 0) {
+        // If number is divisible by 500 run the milestone notification
         generalChannel.send(`Wow! this is amazing, with all our efforts, we reached ${number} Keep it up kappa 😚😚😚`);
     }
 }
@@ -111,10 +107,14 @@ function checkMilestone(msg) {
 
 function shame(msg) {
     msg.delete();
-    generalChannel.send(`Shame... ${msg.author} does not believe in true order!`);
+    generalChannel.send(`!insult ${msg.author}`);
+    // generalChannel.send(`Shame... ${msg.author} does not believe in true order!`);
 }
 
 
 function getPreviousMessage(msg) {
-    return numberChannel.fetchMessages({ limit: 1, before: msg.id });
+    return numberChannel.fetchMessages({
+        limit: 1,
+        before: msg.id,
+    });
 }
