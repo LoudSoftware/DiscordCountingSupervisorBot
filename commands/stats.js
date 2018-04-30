@@ -98,28 +98,22 @@ module.exports = {
         if (array.length === 0) {
             return null;
         }
-        let map = new Map();
-        let maxEl = array[0];
-        let maxCount = 1;
+
+        const map = new Map();
         for (let i = 0; i < array.length; i++) {
             const el = array[i].author.id;
             if (map.get(el) === undefined) {
                 map.set(el, 1);
             } else {
-                let value = map.get(el) + 1;
-                map.set(el, value);
-            }
-            if (map.get(el) > maxCount) {
-                maxEl = el;
-                maxCount = map.get(el);
+                map.set(el, map.get(el) + 1);
             }
         }
 
         map[Symbol.iterator] = function* () {
             yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
-        }
+        };
 
-        let result = [];
+        const result = [];
 
         for (let i = 0; i < map.size && i < 3; i++) {
             result[i] = [...map][i][0];
