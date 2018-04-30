@@ -1,1 +1,1 @@
-web: node --inspect ./bot.js
+worker: node --inspect ./bot.js
