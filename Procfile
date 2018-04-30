@@ -1,1 +1,1 @@
-worker: npm start
+worker: node --inspect ./bot.js

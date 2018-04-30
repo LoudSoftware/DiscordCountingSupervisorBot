@@ -41,7 +41,7 @@ client.on('ready',
     });
 
 client.on('message', message => {
-    logger.verbose('Received message:', message.content);
+    logger.verbose('Received message', message.content);
     if (message.content.startsWith(prefix) && !message.author.bot && message.channel === generalChannel) {
 
         const args = message.content.slice(prefix.length).split(/ +/);
