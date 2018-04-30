@@ -115,9 +115,12 @@ module.exports = {
 
         const result = [];
 
+        logger.debug('Top of month are:');
         for (let i = 0; i < map.size && i < 3; i++) {
             result[i] = [...map][i][0];
+            logger.debug(i, result[i]);
         }
+        logger.debug();
 
         return result;
     },
