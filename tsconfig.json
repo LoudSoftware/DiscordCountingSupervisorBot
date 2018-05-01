@@ -24,7 +24,11 @@
     "allowJs": true,
     "esModuleInterop": true,
     "target": "es6",
+    "lib": [
+      "es6"
+    ],
     "noImplicitAny": false,
+    "strictFunctionTypes": false,
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
