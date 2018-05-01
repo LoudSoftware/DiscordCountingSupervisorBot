@@ -1,15 +1,15 @@
 module.exports = {
-    name: 'until',
-    description: 'Sends time until we reach the number given by the user',
+    name: "until",
+    description: "Sends time until we reach the number given by the user",
     async execute(message, args) {
 
         if (args.length === 0) {
             // If the user just typed "!echo", say "Invalid input"
-            return message.reply('You need to show me da wey!');
+            return message.reply("You need to show me da wey!");
         }
 
         if (isNaN(args[0])) {
-            return message.reply('This must be a numbah!');
+            return message.reply("This must be a numbah!");
         }
 
 
@@ -21,7 +21,7 @@ module.exports = {
 
         const goal = parseInt(args[0]);
 
-        const epoch = new Date('April 06, 2018');
+        const epoch = new Date("April 06, 2018").getSeconds(); // todo test if we need milliseconds instead
 
         const timeElapsed = (Date.now() - epoch) / 86400000; // milliseconds per day
 
@@ -39,7 +39,7 @@ module.exports = {
                     if (currentNumber < goal) {
                         return message.channel.send(`With our current rate, we should reach ${goal} in about ${(goal / numberPerDay).toFixed(2)} days!`);
                     }
-                    return message.channel.send('We already reached that point you little cuck!');
+                    return message.channel.send("We already reached that point you little cuck!");
                 }
             });
 
