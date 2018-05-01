@@ -1,4 +1,4 @@
-const winston = require("winston");
+import * as winston from "winston";
 
 
 export const logger = new(winston.Logger)({

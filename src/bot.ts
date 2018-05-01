@@ -1,13 +1,9 @@
-const fs = require("fs");
+import * as fs from "fs";
 
-// const winston = require('winston');
 import { logger } from "./log";
-// const Discord = require('discord.js');
 import { Client, Channel, Collection, Message } from "discord.js";
-// const checker = require('./checker.js');
 import { Checker } from "./checker";
-// const client = new Discord.Client();
-// import { Client } from "discord.js";
+
 const client = new Client();
 const prefix = ":";
 

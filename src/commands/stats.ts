@@ -1,6 +1,5 @@
 import { User, Message, RichEmbed } from "discord.js";
 import { logger } from "../log";
-// const logger = require('../log.js');
 
 module.exports = {
     logoUrl: "http://gravatar.com/avatar/0a68062bcb04fd6001941b9126dfa9d9.jpg",
