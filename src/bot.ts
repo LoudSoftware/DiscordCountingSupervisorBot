@@ -5,7 +5,7 @@ import { Client, Channel, Collection, Message } from "discord.js";
 import { Checker } from "./checker";
 
 const client = new Client();
-const prefix = ":";
+const prefix = ".";
 
 
 client.commands = new Collection();
