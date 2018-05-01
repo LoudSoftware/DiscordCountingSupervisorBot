@@ -1,36 +1,10 @@
-/* {
-  "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "outDir": "dist",
-    "sourceMap": true
-  },
-  "files": [
-    "./node_modules/@types/mocha/index.d.ts",
-    "./node_modules/@types/node/index.d.ts",
-    "./node_modules/discord.js/typings/index.d.ts",
-  ],
-  "include": [
-    "src/**//*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
-} */
-
 {
   "compilerOptions": {
     "module": "commonjs",
     "allowJs": true,
     "esModuleInterop": true,
     "target": "es6",
-    "lib": [
-      "es6"
-    ],
     "noImplicitAny": false,
-    "strictFunctionTypes": false,
-    "strict": false,
-    "alwaysStrict": false,
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
