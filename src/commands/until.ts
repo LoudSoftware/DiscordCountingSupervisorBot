@@ -21,9 +21,11 @@ module.exports = {
 
         const goal = parseInt(args[0]);
 
-        const epoch = new Date("April 06, 2018").getSeconds(); // todo test if we need milliseconds instead
+        const epoch: any = new Date("April 06, 2018");
 
-        const timeElapsed = (Date.now() - epoch) / 86400000; // milliseconds per day
+        const now = Date.now();
+
+        const timeElapsed = (now - epoch) / 86400000; // milliseconds per day
 
         return message.client.channels.get(process.env.NUMBER_CHANNEL_ID)
             .fetchMessages({
