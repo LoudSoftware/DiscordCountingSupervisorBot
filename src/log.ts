@@ -1,15 +1,14 @@
-import * as winston from "winston";
+import * as winston from 'winston';
 
-
-export const logger = new(winston.Logger)({
+export const logger = new (winston.Logger)({
     transports: [
-        new(winston.transports.Console)({
+        new (winston.transports.Console)({
             colorize: true,
-            level: "debug",
+            level: 'debug',
         }),
-        new(winston.transports.File)({
-            filename: "debug.log",
-            level: "error",
+        new (winston.transports.File)({
+            filename: 'debug.log',
+            level: 'error',
         }),
     ],
 });

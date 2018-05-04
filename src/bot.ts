@@ -1,69 +1,57 @@
-import * as fs from "fs";
+import * as fs from 'fs';
+import * as path from 'path';
 
-import { logger } from "./log";
-import { Client, Channel, Collection, Message } from "discord.js";
-import { Checker } from "./checker";
+import { Channel, Client, Collection, Message } from 'discord.js';
+import { CommandMessage, CommandoClient } from 'discord.js-commando';
+import { Checker } from './checker';
+import { logger } from './log';
 
-const client = new Client();
-const prefix = ".";
+const client = new CommandoClient({
+    owner: '147410761021390850',
+    commandPrefix: '.',
+});
 
-
-client.commands = new Collection();
-const commandFiles = fs.readdirSync("./dist/commands");
-
-for (const file of commandFiles) {
-    if (file.split(".")[2] === undefined) {
-        const command = require(`./commands/${file}`);
-        logger.debug(`Loaded command ${command.name} from ${file}`);
-        client.commands.set(command.name, command);
-    }
-}
-
-// Loading the token from the .env file
-require("dotenv").config();
+// loading the token from the .env file
+require('dotenv').config();
 
 const token = process.env.BOT_TOKEN;
-
 
 const generalID = process.env.GENERAL_CHANNEL_ID;
 const numberChannelID = process.env.NUMBER_CHANNEL_ID;
 
-
 let numberChannel: Channel;
 let generalChannel: Channel;
 
+logger.info('Attempting to connect to server...');
 
-logger.info("Attempting to connect to server...");
-
-
-client.on("ready",
+client.on('ready',
     () => {
-        logger.info("Connected, bot ready...");
+        logger.info('Connected, bot ready...');
         numberChannel = client.channels.get(numberChannelID.toString());
         generalChannel = client.channels.get(generalID.toString());
+        client.user.setActivity('you count...', { type: 'WATCHING' });
     });
 
-client.on("message", message => {
+client.registry
+    .registerGroups([
+        ['util', 'Util'],
+        ['counting', 'Counting'],
+        ['info', 'Info'],
+    ])
+    .registerDefaults()
+    .registerCommandsIn(path.join(__dirname, 'commands'));
+
+client.dispatcher.addInhibitor((message: CommandMessage) => message.channel.id === process.env.NUMBER_CHANNEL_ID);
+
+client.on('commandBlocked', (msg: CommandMessage, reason: string) => null);
+
+client.on("message", (message: Message) => {
     logger.verbose("Received message", message.content);
-    if (message.content.startsWith(prefix) && !message.author.bot && message.channel !== numberChannel) {
 
-        const args = message.content.slice(prefix.length).split(/ +/);
-        const command = args.shift().toLowerCase();
-
-        if (!client.commands.has(command)) return;
-
-        try {
-            client.commands.get(command).execute(message, args);
-        } catch (error) {
-            logger.debug(error);
-            message.reply("there was an error trying to execute that command!");
-        }
-    } else {
+    if (message.channel.type !== 'dm') {
         const checker = new Checker(message);
-        // checker.ping();
         checker.check(message, numberChannel);
     }
 });
-
 
 client.login(token);
