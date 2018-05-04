@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { Channel, Client, Collection, Message } from 'discord.js';
-import { CommandoClient } from 'discord.js-commando';
+import { CommandMessage, CommandoClient } from 'discord.js-commando';
 import { Checker } from './checker';
 import { logger } from './log';
 
@@ -42,6 +42,7 @@ client.on('ready',
         logger.info('Connected, bot ready...');
         numberChannel = client.channels.get(numberChannelID.toString());
         generalChannel = client.channels.get(generalID.toString());
+        client.user.setActivity('you count...', { type: 'WATCHING' });
     });
 
 client.registry
@@ -53,26 +54,13 @@ client.registry
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, 'commands'));
 
-/* client.on("message", message => {
+client.on('commandBlocked', (msg: CommandMessage, reason: string) => null);
+
+client.on("message", (message: Message) => {
     logger.verbose("Received message", message.content);
-    if (message.content.startsWith(prefix) && !message.author.bot && message.channel !== numberChannel) {
 
-        const args = message.content.slice(prefix.length).split(/ +/);
-        const command = args.shift().toLowerCase();
-
-        // if (!client.commands.has(command)) return;
-
-        try {
-            // client.commands.get(command).execute(message, args);
-        } catch (error) {
-            logger.debug(error);
-            message.reply("there was an error trying to execute that command!");
-        }
-    } else {
-        const checker = new Checker(message);
-        // checker.ping();
-        checker.check(message, numberChannel);
-    }
-}); */
+    const checker = new Checker(message);
+    checker.check(message, numberChannel);
+});
 
 client.login(token);

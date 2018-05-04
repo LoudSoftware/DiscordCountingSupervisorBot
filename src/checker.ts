@@ -60,13 +60,13 @@ export class Checker {
         const num: number = parseInt(msg.content);
         if (num % 500 === 0) {
             // if number is divisible by 500 run the milestone notification
-            this.generalChannel.send(`Wow! this is amazing, with all our efforts, we reached ${number} Keep it up kappa 😚😚😚`);
+            this.generalChannel.send(`Wow! this is amazing, with all our efforts, we reached ${num} Keep it up kappa 😚😚😚`);
         }
     }
 
     private shame(msg: Message) {
         msg.delete();
-        this.generalChannel.send(`>insult ${msg.author}`);
+        this.generalChannel.send(`Shame! ${msg.author} does not believe in true order...`);
         // generalChannel.send(`Shame... ${msg.author} does not believe in true order!`);
     }
 

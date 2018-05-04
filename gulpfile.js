@@ -5,6 +5,7 @@ const gulpTs = require('gulp-typescript');
 const gulpTslint = require('gulp-tslint');
 const tslint = require('tslint');
 const sourcemaps = require('gulp-sourcemaps');
+const relativeSourcemapsSource = require('gulp-relative-sourcemaps-source');
 const del = require('del');
 const path = require('path');
 const nodemon = require('gulp-nodemon');
@@ -23,24 +24,14 @@ gulp.task('lint', () => {
 })
 
 gulp.task('build', ['lint'], () => {
+    // Delete the dist folder
     del.sync(['./dist/**/*.*']);
-    gulp.src('./src/**/*.js')
-        .pipe(gulp.dest('dist/'));
-    gulp.src('./src/**/*.json')
-        .pipe(gulp.dest('dist/'));
-    gulp.src('./src/**/*.png')
-        .pipe(gulp.dest('dist/'));
-    gulp.src('./src/**/*.ttf')
-        .pipe(gulp.dest('dist/'));
-    const tsCompile = gulp.src('./src/**/*.ts')
+    return gulp.src('./src/**/*.ts')
         .pipe(sourcemaps.init())
-        .pipe(project());
-
-    return tsCompile.js
-        .pipe(sourcemaps.write({
-            sourceRoot: file => path.relative(path.join(file.cwd, file.path), file.base)
-        }))
-        .pipe(gulp.dest('./dist/'));
+        .pipe(project())
+        // .pipe(relativeSourcemapsSource({dest: 'dist'}))
+        .pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: '../src' }))
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('watch', ['build'], function () {
@@ -53,6 +44,7 @@ gulp.task('start', ['build'], function () {
         watch: './dist/bot.js'
     })
 })
+
 
 gulp.task('serve', ['watch'], function () {
     return nodemon({
