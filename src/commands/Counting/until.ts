@@ -22,12 +22,7 @@ export default class Until extends Command {
         });
     }
 
-    public hasPermission(message: CommandMessage) {
-        return (message.channel.id === process.env.NUMBER_CHANNEL_ID ? null : true);
-    }
     public async run(message: CommandMessage, args: { goal: number }): Promise<Message | Message[]> {
-
-        if (message.channel.id === process.env.NUMBER_CHANNEL_ID) return;
 
         await this.getCurrentNumber(message, args);
         return null;

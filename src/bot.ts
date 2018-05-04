@@ -11,19 +11,6 @@ const client = new CommandoClient({
     commandPrefix: '.',
 });
 
-const prefix = '.';
-
-// client.commands = new Collection();
-/* const commandFiles = fs.readdirSync("./dist/commands");
-
-for (const file of commandFiles) {
-    if (file.split(".")[2] === undefined) {
-        const command = require(`./commands/${file}`);
-        logger.debug(`Loaded command ${command.name} from ${file}`);
-        client.commands.set(command.name, command);
-    }
-} */
-
 // loading the token from the .env file
 require('dotenv').config();
 
@@ -54,13 +41,17 @@ client.registry
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, 'commands'));
 
+client.dispatcher.addInhibitor((message: CommandMessage) => message.channel.id === process.env.NUMBER_CHANNEL_ID);
+
 client.on('commandBlocked', (msg: CommandMessage, reason: string) => null);
 
 client.on("message", (message: Message) => {
     logger.verbose("Received message", message.content);
 
-    const checker = new Checker(message);
-    checker.check(message, numberChannel);
+    if (message.channel.type !== 'dm') {
+        const checker = new Checker(message);
+        checker.check(message, numberChannel);
+    }
 });
 
 client.login(token);

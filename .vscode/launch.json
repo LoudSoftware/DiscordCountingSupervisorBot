@@ -36,6 +36,7 @@
             "port": 9229,
             "console": "internalConsole",
             "sourceMaps": true,
+            "timeout": 60000
         },
         {
             "type": "node",

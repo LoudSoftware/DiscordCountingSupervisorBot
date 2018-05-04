@@ -29,7 +29,7 @@ export default class Prune extends Command {
 
     public async run(message: CommandMessage, args: {amount: number }): Promise<Message| Message[]> {
 
-        if (message.channel.id === process.env.NUMBER_CHANNEL_ID) return;
+        // if (message.channel.id === process.env.NUMBER_CHANNEL_ID) return;
 
         let { amount } = args;
         amount ++;
