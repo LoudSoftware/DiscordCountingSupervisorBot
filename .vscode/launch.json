@@ -5,28 +5,47 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}\\src\\bot.ts",
+            "stopOnEntry": true,
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": null,
+            "runtimeExecutable": null,
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "sourceMaps": true,
+            "outFiles": ["${workspaceRoot}\\dist\\**\\*.js"],
+            "trace": "sm"
+        },
+        {
             "type": "node",
             "request": "launch",
             "name": "Launch via NPM",
             "runtimeExecutable": "npm",
-            "protocol": "inspector",
-            "sourceMaps": true,
-            "localRoot": "${workspaceFolder}/dist",
             "runtimeArgs": [
-                "start"
+                "run",
+                "serve"
             ],
-            "port": 9229
+            "port": 9229,
+            "console": "internalConsole",
+            "sourceMaps": true,
         },
         {
             "type": "node",
-            "request": "attach",
-            "name": "Attach",
-            "port": 9229,
-            "sourceMaps": true,
-            "protocol": "inspector",
-            "processId": "${command:PickProcess}",
-            "restart": true,
-            "localRoot": "${workspaceFolder}/dist",
+            "request": "launch",
+            "name": "Gulp serve",
+            "program": "${workspaceFolder}/node_modules/gulp/bin/gulp.js",
+            "args": [
+                "serve"
+            ],
+            "useWSL": true
         },
         {
             "type": "node",
