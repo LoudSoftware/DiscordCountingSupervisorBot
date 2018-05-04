@@ -7,18 +7,14 @@
     "lib": [
       "es6"
     ],
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
+    "rootDir": "src",
     "outDir": "dist",
   },
-  "include": [
-    "src/**/*.ts"
-  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist",
   ],
-  "files": [
-    "./node_modules/discord.js/typings/index.d.ts",
-  ]
 }

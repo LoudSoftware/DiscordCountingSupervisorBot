@@ -1,17 +1,27 @@
-import { User, Message, RichEmbed } from "discord.js";
-import { logger } from "../log";
+import { User, Message, RichEmbed, Channel, TextChannel } from "discord.js";
+import { logger } from "../../log";
+import { CommandoClient, Command, CommandMessage } from "discord.js-commando";
 
-export = {
-    logoUrl: "http://gravatar.com/avatar/0a68062bcb04fd6001941b9126dfa9d9.jpg",
-    currentNumber: 0,
-    topContributors: undefined,
-    topAuthors: [],
-    loudSoftware: User,
+export default class Stats extends Command {
+    private logoUrl: string = "http://gravatar.com/avatar/0a68062bcb04fd6001941b9126dfa9d9.jpg";
+    private currentNumber: number;
+    private topContributors: string[];
+    private topAuthors: any[];
+    private loudSoftware: User;
 
-    name: "stats",
-    description: "Displays statistics about our counting",
-    async execute(message: Message, args: any[]) {
-        if (args.length !== 0) return;
+
+    constructor(client: CommandoClient) {
+        super(client, {
+            name: "stats",
+            aliases: ["statistics", "stat", "s"],
+            memberName: "stats",
+            description: "Displays various stats based on current count",
+            group: "counting",
+
+        });
+    }
+
+    public async run(message: CommandMessage): Promise<Message | Message[]> {
 
         this.loudSoftware = message.client.users.get("147410761021390850");
 
@@ -22,10 +32,11 @@ export = {
 
         // Finally we send the message
         this.sendStats(message);
+        return undefined;
 
-    },
+    }
 
-    async getCurrentNumber(message: Message) {
+    private async getCurrentNumber(message: CommandMessage) {
         return message.client.channels.get(process.env.NUMBER_CHANNEL_ID)
             .fetchMessages({
                 limit: 1,
@@ -33,9 +44,9 @@ export = {
             .then(map => map.array())
             .then(numbersArray => this.currentNumber = parseInt(numbersArray[0].content))
             .catch(error => logger.error(error));
-    },
+    }
 
-    sendStats(message: Message) {
+    private sendStats(message: CommandMessage) {
         // somewhere inside a command, an event, etc.
         const embed = new RichEmbed()
             .setColor("#0099ff")
@@ -62,11 +73,11 @@ export = {
         message.channel.send({
             embed: embed,
         });
-    },
+    }
 
-    async getMostActive(message: Message) {
-        const monthAuthors = await message.client.channels.get(process.env.NUMBER_CHANNEL_ID)
-            .fetchMessages({
+    private async getMostActive(message: CommandMessage) {
+        const channel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID);
+        const monthAuthors = await channel.fetchMessages({
                 limit: 100,
             })
             .then(res => res.array());
@@ -76,7 +87,7 @@ export = {
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
 
-        monthAuthors.forEach((item: Message, index: number, object) => {
+        monthAuthors.forEach((item: CommandMessage, index: number, object) => {
 
             if (item.createdAt.getMonth() !== currentMonth ||
                 item.createdAt.getFullYear() !== currentYear) {
@@ -91,9 +102,9 @@ export = {
 
         logger.debug("Top author of the month (based on the last 100 messages):", this.topAuthors[0].username);
 
-    },
+    }
 
-    processMonthlyMessages(array): string[] {
+    private processMonthlyMessages(array): string[] {
 
         if (array.length === 0) {
             return undefined;
@@ -120,8 +131,8 @@ export = {
             result[i] = [...map][i][0];
             logger.debug(i, result[i]);
         }
-        logger.debug();
+        logger.debug("");
 
         return result;
-    },
-};
+    }
+}

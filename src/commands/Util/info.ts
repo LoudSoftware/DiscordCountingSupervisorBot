@@ -1,12 +1,22 @@
 import { Message, RichEmbed, User } from "discord.js";
+import { CommandoClient, Command, CommandMessage } from "discord.js-commando";
 
-export = {
-    name: "info",
-    description: "Displays statistics about our counting",
-    loudSoftware: User,
-    logoUrl: "http://gravatar.com/avatar/0a68062bcb04fd6001941b9126dfa9d9.jpg",
+export default class InfoCommanmd extends Command {
 
-    async execute(message: Message, args: any[]) {
+    constructor(client: CommandoClient) {
+        super(client, {
+            name: "info",
+            aliases: ["about", "bot"],
+            group: "info",
+            memberName: "info",
+            description: "Displays info about the bot",
+        });
+    }
+
+    private loudSoftware: User;
+    private logoUrl: "http://gravatar.com/avatar/0a68062bcb04fd6001941b9126dfa9d9.jpg";
+
+    public async run(message: CommandMessage): Promise<Message| Message[]> {
 
         this.loudSoftware = message.client.users.get("147410761021390850");
 
@@ -22,9 +32,9 @@ export = {
             .setFooter("Bot Info", this.logoUrl)
             .setTimestamp();
 
-        message.channel.send({
+        return message.channel.send({
             embed: embed,
         });
 
     }
-};
+}
