@@ -47,7 +47,6 @@
     "concurrently": "^3.5.1",
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.2.1",
-    "gulp-relative-sourcemaps-source": "^1.0.0",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-tslint": "^8.1.3",
     "gulp-typescript": "^4.0.2",

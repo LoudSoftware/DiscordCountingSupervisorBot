@@ -5,7 +5,6 @@ const gulpTs = require('gulp-typescript');
 const gulpTslint = require('gulp-tslint');
 const tslint = require('tslint');
 const sourcemaps = require('gulp-sourcemaps');
-const relativeSourcemapsSource = require('gulp-relative-sourcemaps-source');
 const del = require('del');
 const path = require('path');
 const nodemon = require('gulp-nodemon');
@@ -29,7 +28,6 @@ gulp.task('build', ['lint'], () => {
     return gulp.src('./src/**/*.ts')
         .pipe(sourcemaps.init())
         .pipe(project())
-        // .pipe(relativeSourcemapsSource({dest: 'dist'}))
         .pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: '../src' }))
         .pipe(gulp.dest('dist'));
 });
