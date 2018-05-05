@@ -18,8 +18,6 @@ export default class InfoCommanmd extends Command {
 
     public async run(message: CommandMessage): Promise<Message | Message[]> {
 
-        // if (message.channel.id === process.env.NUMBER_CHANNEL_ID) return;
-
         this.loudSoftware = message.client.users.get('147410761021390850');
 
         const embed = new RichEmbed()

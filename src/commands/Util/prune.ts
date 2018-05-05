@@ -29,8 +29,6 @@ export default class Prune extends Command {
 
     public async run(message: CommandMessage, args: {amount: number }): Promise<Message| Message[]> {
 
-        // if (message.channel.id === process.env.NUMBER_CHANNEL_ID) return;
-
         let { amount } = args;
         amount ++;
 
@@ -38,7 +36,6 @@ export default class Prune extends Command {
             console.log(err);
             message.channel.send('there was an error trying to prune messages in this channel!');
         });
-        // tslint:disable-next-line:no-null-keyword
         return null;
     }
 }

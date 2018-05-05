@@ -1,4 +1,4 @@
-import { Channel, Collection, Message, RichEmbed, Snowflake, TextChannel, User } from 'discord.js';
+import { Channel, Collection, Message, RichEmbed, Snowflake, TextBasedChannel, TextBasedChannelFields, TextChannel, User } from 'discord.js';
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando';
 import { logger } from '../../log';
 
@@ -35,13 +35,10 @@ export default class Stats extends Command {
     }
 
     private async getCurrentNumber(message: CommandMessage) {
-        return message.client.channels.get(process.env.NUMBER_CHANNEL_ID)
-            .fetchMessages({
-                limit: 1,
-            })
-            .then((map: Collection<Snowflake, Message>) => map.array())
-            .then((numbersArray: Message[]) => this.currentNumber = parseInt(numbersArray[0].content))
-            .catch((error: any) => logger.error(error));
+        const channel: TextChannel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID);
+        const messages: Collection<Snowflake, Message> = await channel.fetchMessages({ limit: 1 });
+        const array: Message[] = messages.array();
+        this.currentNumber = parseInt(array[0].content);
     }
 
     private sendStats(message: CommandMessage) {
@@ -74,7 +71,7 @@ export default class Stats extends Command {
     }
 
     private async getMostActive(message: CommandMessage) {
-        const channel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID);
+        const channel: TextChannel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID);
         const monthAuthors = await channel.fetchMessages({
             limit: 100,
         })
@@ -84,7 +81,7 @@ export default class Stats extends Command {
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
 
-        monthAuthors.forEach((item: CommandMessage, index: number, object: Message[]) => {
+        monthAuthors.forEach((item: Message, index: number, object: Message[]) => {
 
             if (item.createdAt.getMonth() !== currentMonth ||
                 item.createdAt.getFullYear() !== currentYear) {
