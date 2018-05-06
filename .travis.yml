@@ -11,4 +11,4 @@ cache:
 before_script:
   - npm install -g gulp-cli
 
-  script: gulp start
+script: gulp start
