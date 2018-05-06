@@ -1,4 +1,4 @@
-import { Channel, Collection, Message, RichEmbed, Snowflake, TextBasedChannel, TextBasedChannelFields, TextChannel, User } from 'discord.js';
+import { Channel, Collection, Message, RichEmbed, Snowflake, TextBasedChannel, TextChannel, User } from 'discord.js';
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando';
 import { logger } from '../../log';
 
@@ -23,6 +23,7 @@ export default class Stats extends Command {
     public async run(message: CommandMessage): Promise<Message | Message[]> {
 
         this.loudSoftware = message.client.users.get('147410761021390850');
+        this.loudSoftware = message.client.owners[0];
 
         // get the current number
         await this.getCurrentNumber(message);
@@ -35,6 +36,7 @@ export default class Stats extends Command {
     }
 
     private async getCurrentNumber(message: CommandMessage) {
+        // @ts-ignore
         const channel: TextChannel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID);
         const messages: Collection<Snowflake, Message> = await channel.fetchMessages({ limit: 1 });
         const array: Message[] = messages.array();
@@ -71,6 +73,7 @@ export default class Stats extends Command {
     }
 
     private async getMostActive(message: CommandMessage) {
+        // @ts-ignore
         const channel: TextChannel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID);
         const monthAuthors = await channel.fetchMessages({
             limit: 100,

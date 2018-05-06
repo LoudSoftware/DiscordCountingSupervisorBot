@@ -37,6 +37,7 @@ export default class Until extends Command {
 
         const timeElapsed = (now - epoch) / 86400000; // milliseconds per day
 
+        // @ts-ignore
         const channel: TextChannel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID);
         const messages: Message[] = await channel.fetchMessages({ limit: 1 })
             .then((collection: Collection<Snowflake, Message>) => collection.array());

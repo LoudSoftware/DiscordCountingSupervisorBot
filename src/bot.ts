@@ -1,10 +1,14 @@
+import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { Channel, Client, Collection, Message } from 'discord.js';
+import { Channel, Client, Collection, Message, TextChannel } from 'discord.js';
 import { CommandMessage, CommandoClient } from 'discord.js-commando';
 import { Checker } from './checker';
 import { logger } from './log';
+import { CountModel } from './models/CountModel';
+import { sequelize } from './sequelize';
+import {DBTools} from "./DBTools";
 
 const client = new CommandoClient({
     owner: '147410761021390850',
@@ -12,8 +16,14 @@ const client = new CommandoClient({
 });
 
 // loading the token from the .env file
-require('dotenv').config();
+dotenv.config();
 
+// db stuff
+sequelize.addModels([CountModel]);
+const force = process.env.NODE_ENV === 'development' ? true : false;
+CountModel.sync({ force });
+
+// various discord connection info
 const token = process.env.BOT_TOKEN;
 
 const generalID = process.env.GENERAL_CHANNEL_ID;
@@ -30,6 +40,8 @@ client.on('ready',
         numberChannel = client.channels.get(numberChannelID.toString());
         generalChannel = client.channels.get(generalID.toString());
         client.user.setActivity('you count...', { type: 'WATCHING' });
+        // TODO experiment with that
+        DBTools.checkCountStatus(client);
     });
 
 client.registry

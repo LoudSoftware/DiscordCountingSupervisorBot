@@ -12,9 +12,11 @@
     "sourceMap": true,
     "rootDir": "src",
     "outDir": "dist",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
   },
   "exclude": [
     "node_modules",
-    "dist",
-  ],
+    "dist"
+  ]
 }

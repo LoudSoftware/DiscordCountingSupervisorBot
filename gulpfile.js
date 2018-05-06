@@ -44,7 +44,7 @@ gulp.task('start', ['build'], function () {
 })
 
 
-gulp.task('serve', ['watch'], function () {
+gulp.task('debug', ['watch'], function () {
     return nodemon({
         script: './dist/bot.js',
         watch: './dist/',
