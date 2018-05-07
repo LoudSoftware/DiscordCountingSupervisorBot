@@ -1,4 +1,6 @@
 import * as dotenv from 'dotenv';
+// loading the token from the .env file
+dotenv.config();
 import * as path from 'path';
 
 import { Channel, Message } from 'discord.js';
@@ -14,13 +16,10 @@ const client = new CommandoClient({
     commandPrefix: '.',
 });
 
-// loading the token from the .env file
-dotenv.config();
-
 // db stuff
 sequelize.addModels([CountModel]);
-const force = process.env.NODE_ENV === 'development';
-CountModel.sync({ force }).then(() => logger.debug('finished syncing to DB, sync forced', force));
+// const force = process.env.NODE_ENV !== 'development';
+CountModel.sync({ force: false }).then(() => logger.debug('finished syncing to DB, sync forced', false));
 
 // various discord connection info
 const token = process.env.BOT_TOKEN;
