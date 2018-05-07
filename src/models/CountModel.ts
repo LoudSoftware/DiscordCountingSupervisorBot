@@ -2,7 +2,8 @@ import { Snowflake, User } from "discord.js";
 import { Column, CreatedAt, HasMany, Model, NotNull, Table, UpdatedAt } from "sequelize-typescript";
 
 @Table({
-    timestamps: true
+    timestamps: false,
+    updatedAt: false,
 })
 export class CountModel extends Model<CountModel> {
 
@@ -12,6 +13,6 @@ export class CountModel extends Model<CountModel> {
     @Column
     public number: number;
 
-    @CreatedAt
+    @Column
     public date: Date;
 }

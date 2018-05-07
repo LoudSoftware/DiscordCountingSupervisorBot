@@ -1,5 +1,4 @@
 import * as dotenv from 'dotenv';
-import * as fs from 'fs';
 import * as path from 'path';
 
 import { Channel, Client, Collection, Message, TextChannel } from 'discord.js';
@@ -8,7 +7,7 @@ import { Checker } from './checker';
 import { logger } from './log';
 import { CountModel } from './models/CountModel';
 import { sequelize } from './sequelize';
-import {DBTools} from "./DBTools";
+import { DBTools } from "./DBTools";
 
 const client = new CommandoClient({
     owner: '147410761021390850',
@@ -20,7 +19,8 @@ dotenv.config();
 
 // db stuff
 sequelize.addModels([CountModel]);
-const force = process.env.NODE_ENV === 'development' ? true : false;
+const force = process.env.NODE_ENV === 'development';
+// const force = false;
 CountModel.sync({ force });
 
 // various discord connection info
@@ -41,7 +41,8 @@ client.on('ready',
         generalChannel = client.channels.get(generalID.toString());
         client.user.setActivity('you count...', { type: 'WATCHING' });
         // TODO experiment with that
-        DBTools.checkCountStatus(client);
+        const dbTools = new DBTools(client);
+        dbTools.checkCountStatus().then(() => logger.debug('Done DB/Discord check.'));
     });
 
 client.registry
@@ -55,7 +56,7 @@ client.registry
 
 client.dispatcher.addInhibitor((message: CommandMessage) => message.channel.id === process.env.NUMBER_CHANNEL_ID);
 
-client.on('commandBlocked', (msg: CommandMessage, reason: string) => null);
+client.on('commandBlocked', () => null);
 
 client.on("message", (message: Message) => {
     logger.verbose("Received message", message.content);
@@ -66,4 +67,4 @@ client.on("message", (message: Message) => {
     }
 });
 
-client.login(token);
+client.login(token).then((value: string) => logger.debug(value));

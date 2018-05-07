@@ -41,7 +41,15 @@ gulp.task('start', ['build'], function () {
         script: './dist/bot.js',
         watch: './dist/bot.js'
     })
-})
+});
+
+gulp.task('debug-prod', ['watch'], () => {
+    return nodemon({
+        script: './dist/bot.js',
+        watch: './dist/',
+        nodeArgs: ['--inspect']
+    })
+});
 
 
 gulp.task('debug', ['watch'], function () {

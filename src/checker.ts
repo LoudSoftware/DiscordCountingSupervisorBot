@@ -39,9 +39,10 @@ export class Checker {
                 this.shame(msg);
             } else {
                 // create new model and save to the db
-                const countModel = CountModel.create({
+                CountModel.create({
                     author: msg.author.id,
                     number: parseInt(msg.content),
+                    date: msg.createdAt
                 });
 
                 // check if we reached a milestone
