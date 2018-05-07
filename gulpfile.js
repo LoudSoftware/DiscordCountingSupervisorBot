@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const gulp = require('gulp');
 const gulpTs = require('gulp-typescript');
@@ -6,7 +6,6 @@ const gulpTslint = require('gulp-tslint');
 const tslint = require('tslint');
 const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
-const path = require('path');
 const nodemon = require('gulp-nodemon');
 
 const project = gulpTs.createProject('tsconfig.json');
@@ -20,7 +19,7 @@ gulp.task('lint', () => {
             program: typeCheck
         }))
         .pipe(gulpTslint.report());
-})
+});
 
 gulp.task('build', ['lint'], () => {
     // Delete the dist folder

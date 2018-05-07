@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
-import { Channel, Client, Collection, Message, TextChannel } from 'discord.js';
+import { Channel, Message } from 'discord.js';
 import { CommandMessage, CommandoClient } from 'discord.js-commando';
 import { Checker } from './checker';
 import { logger } from './log';
@@ -20,8 +20,7 @@ dotenv.config();
 // db stuff
 sequelize.addModels([CountModel]);
 const force = process.env.NODE_ENV === 'development';
-// const force = false;
-CountModel.sync({ force });
+CountModel.sync({ force }).then(() => logger.debug('finished syncing to DB, sync forced', force));
 
 // various discord connection info
 const token = process.env.BOT_TOKEN;
@@ -40,7 +39,8 @@ client.on('ready',
         numberChannel = client.channels.get(numberChannelID.toString());
         generalChannel = client.channels.get(generalID.toString());
         client.user.setActivity('you count...', { type: 'WATCHING' });
-        // TODO experiment with that
+
+        // create a new instance of DBTools and call checkCountStatus
         const dbTools = new DBTools(client);
         dbTools.checkCountStatus().then(() => logger.debug('Done DB/Discord check.'));
     });

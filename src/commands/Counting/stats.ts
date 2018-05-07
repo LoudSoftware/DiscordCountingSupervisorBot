@@ -1,14 +1,14 @@
-import { Channel, Collection, Message, RichEmbed, Snowflake, TextBasedChannel, TextChannel, User } from 'discord.js';
+import { Collection, Message, RichEmbed, Snowflake, TextChannel, User } from 'discord.js';
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando';
 import { logger } from '../../log';
 import { CountModel } from "../../models/CountModel";
-import { fn, default as sequelize, where, and, WhereOptions, Op } from "sequelize";
+import { Op } from "sequelize";
 
 export default class Stats extends Command {
     private logoUrl: string = 'http://gravatar.com/avatar/0a68062bcb04fd6001941b9126dfa9d9.jpg';
     private currentNumber: number;
     private topContributors: string[];
-    private topAuthors: User[] = new Array<User>();
+    private topAuthors: User[] = [];
     private loudSoftware: User;
 
     constructor(client: CommandoClient) {
@@ -103,8 +103,7 @@ export default class Stats extends Command {
         });
 
         const topAuthorIDs = this.processMonthlyMessages(result);
-        // const topAuthorIDs = this.processMonthlyMessages(monthAuthors);
-        topAuthorIDs.forEach((elem: string, index: number) => {
+        topAuthorIDs.forEach((elem: string) => {
             this.topAuthors.push(message.client.users.get(elem));
         });
 

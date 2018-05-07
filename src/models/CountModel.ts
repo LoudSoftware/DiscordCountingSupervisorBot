@@ -1,5 +1,5 @@
-import { Snowflake, User } from "discord.js";
-import { Column, CreatedAt, HasMany, Model, NotNull, Table, UpdatedAt } from "sequelize-typescript";
+import { Snowflake } from "discord.js";
+import { Column, Model, Table } from "sequelize-typescript";
 
 @Table({
     timestamps: false,

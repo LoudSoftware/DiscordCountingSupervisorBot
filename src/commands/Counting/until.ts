@@ -1,6 +1,5 @@
-import { Channel, Collection, Message, RichEmbed, Snowflake, TextChannel, User } from "discord.js";
+import { Collection, Message, Snowflake, TextChannel } from "discord.js";
 import { Command, CommandMessage, CommandoClient } from "discord.js-commando";
-import { logger } from "../../log";
 
 export default class Until extends Command {
     constructor(client: CommandoClient) {
