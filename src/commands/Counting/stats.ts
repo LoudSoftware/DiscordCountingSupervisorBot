@@ -1,12 +1,14 @@
-import { Channel, Collection, Message, RichEmbed, Snowflake, TextBasedChannel, TextBasedChannelFields, TextChannel, User } from 'discord.js';
+import { Collection, Message, RichEmbed, Snowflake, TextChannel, User } from 'discord.js';
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando';
 import { logger } from '../../log';
+import { CountModel } from "../../models/CountModel";
+import { Op } from "sequelize";
 
 export default class Stats extends Command {
     private logoUrl: string = 'http://gravatar.com/avatar/0a68062bcb04fd6001941b9126dfa9d9.jpg';
     private currentNumber: number;
     private topContributors: string[];
-    private topAuthors: User[] = new Array<User>();
+    private topAuthors: User[] = [];
     private loudSoftware: User;
 
     constructor(client: CommandoClient) {
@@ -23,6 +25,7 @@ export default class Stats extends Command {
     public async run(message: CommandMessage): Promise<Message | Message[]> {
 
         this.loudSoftware = message.client.users.get('147410761021390850');
+        this.loudSoftware = message.client.owners[0];
 
         // get the current number
         await this.getCurrentNumber(message);
@@ -35,6 +38,7 @@ export default class Stats extends Command {
     }
 
     private async getCurrentNumber(message: CommandMessage) {
+        // @ts-ignore
         const channel: TextChannel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID);
         const messages: Collection<Snowflake, Message> = await channel.fetchMessages({ limit: 1 });
         const array: Message[] = messages.array();
@@ -54,9 +58,7 @@ export default class Stats extends Command {
             .addField('Top 3 counters of the Month:',
                 `1.  ${this.topAuthors[0]} (All hail the king!)
 2. ${(this.topAuthors[1] === undefined ? 'You let him count alone??' : this.topAuthors[1])}
-3. ${(this.topAuthors[2] === undefined ? 'Hmm, nobody here' : this.topAuthors[2])}
-
-(right now I am stoopid bot that only looks at the last 100 messages My master is fixing things but he could be quite lazy sometimes...)`)
+3. ${(this.topAuthors[2] === undefined ? 'Hmm, nobody here' : this.topAuthors[2])}`)
             .addBlankField()
             // .addField('Inline field title', 'Some value here', true)
             // .addField('Inline field title', 'Some value here', true)
@@ -71,15 +73,26 @@ export default class Stats extends Command {
     }
 
     private async getMostActive(message: CommandMessage) {
+
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+
+        const result = await CountModel
+            .findAll({
+                where: {
+                    date: {
+                        [Op.gte]: new Date(currentYear, currentMonth, 1)
+                    }
+                }
+            });
+
+        // @ts-ignore
         const channel: TextChannel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID);
         const monthAuthors = await channel.fetchMessages({
             limit: 100,
         })
             .then((res: Collection<Snowflake, Message>) => res.array());
-
-        const currentDate = new Date();
-        const currentMonth = currentDate.getMonth();
-        const currentYear = currentDate.getFullYear();
 
         monthAuthors.forEach((item: Message, index: number, object: Message[]) => {
 
@@ -89,8 +102,8 @@ export default class Stats extends Command {
             }
         });
 
-        const topAuthorIDs = this.processMonthlyMessages(monthAuthors);
-        topAuthorIDs.forEach((elem: string, index: number) => {
+        const topAuthorIDs = this.processMonthlyMessages(result);
+        topAuthorIDs.forEach((elem: string) => {
             this.topAuthors.push(message.client.users.get(elem));
         });
 
@@ -98,7 +111,7 @@ export default class Stats extends Command {
 
     }
 
-    private processMonthlyMessages(array: Message[]): string[] {
+    private processMonthlyMessages(array: CountModel[]): string[] {
 
         if (array.length === 0) {
             return undefined;
@@ -106,7 +119,7 @@ export default class Stats extends Command {
 
         const map = new Map();
         for (const msg of array) {
-            const el = msg.author.id;
+            const el = msg.author;
             if (map.get(el) === undefined) {
                 map.set(el, 1);
             } else {

@@ -1,6 +1,5 @@
-import { Channel, Collection, Message, RichEmbed, Snowflake, TextChannel, User } from "discord.js";
+import { Collection, Message, Snowflake, TextChannel } from "discord.js";
 import { Command, CommandMessage, CommandoClient } from "discord.js-commando";
-import { logger } from "../../log";
 
 export default class Until extends Command {
     constructor(client: CommandoClient) {
@@ -37,6 +36,7 @@ export default class Until extends Command {
 
         const timeElapsed = (now - epoch) / 86400000; // milliseconds per day
 
+        // @ts-ignore
         const channel: TextChannel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID);
         const messages: Message[] = await channel.fetchMessages({ limit: 1 })
             .then((collection: Collection<Snowflake, Message>) => collection.array());

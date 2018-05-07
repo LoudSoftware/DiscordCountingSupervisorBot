@@ -1,19 +1,27 @@
-import * as fs from 'fs';
+import * as dotenv from 'dotenv';
+// loading the token from the .env file
+dotenv.config();
 import * as path from 'path';
 
-import { Channel, Client, Collection, Message } from 'discord.js';
+import { Channel, Message } from 'discord.js';
 import { CommandMessage, CommandoClient } from 'discord.js-commando';
 import { Checker } from './checker';
 import { logger } from './log';
+import { CountModel } from './models/CountModel';
+import { sequelize } from './sequelize';
+import { DBTools } from "./DBTools";
 
 const client = new CommandoClient({
     owner: '147410761021390850',
     commandPrefix: '.',
 });
 
-// loading the token from the .env file
-require('dotenv').config();
+// db stuff
+sequelize.addModels([CountModel]);
+// const force = process.env.NODE_ENV !== 'development';
+CountModel.sync({ force: false }).then(() => logger.debug('finished syncing to DB, sync forced', false));
 
+// various discord connection info
 const token = process.env.BOT_TOKEN;
 
 const generalID = process.env.GENERAL_CHANNEL_ID;
@@ -30,6 +38,10 @@ client.on('ready',
         numberChannel = client.channels.get(numberChannelID.toString());
         generalChannel = client.channels.get(generalID.toString());
         client.user.setActivity('you count...', { type: 'WATCHING' });
+
+        // create a new instance of DBTools and call checkCountStatus
+        const dbTools = new DBTools(client);
+        dbTools.checkCountStatus().then(() => logger.debug('Done DB/Discord check.'));
     });
 
 client.registry
@@ -43,7 +55,7 @@ client.registry
 
 client.dispatcher.addInhibitor((message: CommandMessage) => message.channel.id === process.env.NUMBER_CHANNEL_ID);
 
-client.on('commandBlocked', (msg: CommandMessage, reason: string) => null);
+client.on('commandBlocked', () => null);
 
 client.on("message", (message: Message) => {
     logger.verbose("Received message", message.content);
@@ -54,4 +66,4 @@ client.on("message", (message: Message) => {
     }
 });
 
-client.login(token);
+client.login(token).then((value: string) => logger.debug(value));

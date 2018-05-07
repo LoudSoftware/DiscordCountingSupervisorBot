@@ -4,3 +4,5 @@ auth.json
 /.idea
 /dist
 *.log
+*.sqlite
+.vscode/launch.json

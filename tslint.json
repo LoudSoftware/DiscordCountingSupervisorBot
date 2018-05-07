@@ -118,9 +118,7 @@
 		"one-variable-per-declaration": [
 			true
 		],
-		"ordered-imports": [
-			true
-		],
+		"ordered-imports": false,
 		"prefer-for-of": true,
 		"use-isnan": true,
 		"array-type": [
