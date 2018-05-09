@@ -1,4 +1,4 @@
-import { Channel, Collection, Guild, Message, Snowflake } from 'discord.js';
+import { Channel, Collection, Guild, Message, Snowflake, TextChannel } from 'discord.js';
 import { logger } from './log';
 import { CountModel } from "./models/CountModel";
 
@@ -6,21 +6,20 @@ export class Checker {
 
     private message: Message;
     private guild: Guild;
-    private numberChannel: Channel;
-    private generalChannel: Channel;
+    private numberChannel: TextChannel;
+    private generalChannel: TextChannel;
 
     constructor(message: Message) {
         this.message = message;
         this.guild = message.guild;
-        this.generalChannel = this.guild.channels.get(process.env.GENERAL_CHANNEL_ID);
-        this.numberChannel = this.guild.channels.get(process.env.NUMBER_CHANNEL_ID);
+        this.generalChannel = this.guild.channels.get(process.env.GENERAL_CHANNEL_ID) as TextChannel;
+        this.numberChannel = this.guild.channels.get(process.env.NUMBER_CHANNEL_ID) as TextChannel;
     }
 
     public async check(message: Message, numberChannel: Channel) {
         if (message.channel === numberChannel && !message.author.bot) {
             if (isNaN(parseInt(message.content))) {
                 await message.delete();
-                // @ts-ignore
                 this.generalChannel.send(`Shame... ${message.author} wrote something that was not a number!`);
             } else {
                 this.checkIfPrevious(message);
@@ -57,20 +56,16 @@ export class Checker {
         const num: number = parseInt(msg.content);
         if (num % 500 === 0) {
             // if number is divisible by 500 run the milestone notification
-            // @ts-ignore
             this.generalChannel.send(`Wow! this is amazing, with all our efforts, we reached ${num} Keep it up kappa 😚😚😚`);
         }
     }
 
     private shame(msg: Message) {
         msg.delete();
-        // @ts-ignore
         this.generalChannel.send(`Shame! ${msg.author} does not believe in true order...`);
-        // generalChannel.send(`Shame... ${msg.author} does not believe in true order!`);
     }
 
-    private getPreviousMessage(msg: Message): Collection<Snowflake, Message> {
-        // @ts-ignore
+    private getPreviousMessage(msg: Message): Promise<Collection<Snowflake, Message>> {
         return this.numberChannel.fetchMessages({
             limit: 1,
             before: msg.id,

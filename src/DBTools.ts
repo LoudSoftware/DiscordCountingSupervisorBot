@@ -14,8 +14,7 @@ export class DBTools {
 
     constructor(client: CommandoClient) {
         this.client = client;
-        // @ts-ignore
-        this.numberChannel = client.channels.get(this.numberChannelID);
+        this.numberChannel = client.channels.get(this.numberChannelID) as TextChannel;
     }
 
     public async checkCountStatus() {
@@ -68,7 +67,6 @@ export class DBTools {
             const array: Message[] = messages.array();
             logger.debug('Current Messages Array', array.length);
 
-            // fullBackupArray.concat(array);
             array.forEach((elem: Message) => {
                 fullBackupArray.push(elem);
             });

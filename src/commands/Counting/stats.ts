@@ -38,8 +38,7 @@ export default class Stats extends Command {
     }
 
     private async getCurrentNumber(message: CommandMessage) {
-        // @ts-ignore
-        const channel: TextChannel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID);
+        const channel: TextChannel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID) as TextChannel;
         const messages: Collection<Snowflake, Message> = await channel.fetchMessages({ limit: 1 });
         const array: Message[] = messages.array();
         this.currentNumber = parseInt(array[0].content);
@@ -87,8 +86,7 @@ export default class Stats extends Command {
                 }
             });
 
-        // @ts-ignore
-        const channel: TextChannel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID);
+        const channel: TextChannel = message.client.channels.get(process.env.NUMBER_CHANNEL_ID) as TextChannel;
         const monthAuthors = await channel.fetchMessages({
             limit: 100,
         })

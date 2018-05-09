@@ -32,9 +32,9 @@ export default class Prune extends Command {
         let { amount } = args;
         amount ++;
 
-        message.channel.bulkDelete(amount, true).catch((err: Promise<void | Collection<string, Message>>) => {
+        message.channel.bulkDelete(amount, true).catch((err: any) => {
             console.log(err);
-            message.channel.send('there was an error trying to prune messages in this channel!');
+            message.channel.send('There was an error trying to prune messages in this channel!');
         });
         return null;
     }
